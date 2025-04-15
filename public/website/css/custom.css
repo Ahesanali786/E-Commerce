@@ -1,0 +1,245 @@
+.footer-middle {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+}
+.text-right{
+    text-align: right;
+}
+.pt-90 {
+    padding-top: 90px !important;
+}
+.my-account__address-list {
+    display: flex;
+    gap: 1.625rem;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-select {
+    height: 48px;
+}
+
+/* Main container for the variants list */
+.variants-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.variants-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.variant-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.variant-item:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.variant-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+}
+
+.variant-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.no-variants {
+    text-align: center;
+    font-size: 1rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Main container for the variants list */
+.variants-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.variants-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.variant-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.variant-item:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.variant-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+}
+
+.variant-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.no-variants {
+    text-align: center;
+    font-size: 1rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.variant-options {
+    margin-bottom: 15px;
+}
+
+.size-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.variant-btn {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.variant-btn:hover {
+    background-color: #f1f1f1;
+}
+
+.variant-btn.active {
+    background-color: #2874f0;
+    color: white;
+    border-color: #2874f0;
+}
+
+.variant-section {
+    margin-bottom: 20px;
+}
+
+.variant-title {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.variant-name {
+    margin-right: 5px;
+}
+.colour-btn{
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.colour-btn:hover {
+    background-color: #f1f1f1;
+}
+
+.colour-btn.active {
+    background-color: #2874f0;
+    color: white;
+    border-color: #2874f0;
+}
+
+.address-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.address-header span {
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.6rem;
+    margin-right: 0.5rem;
+}
+
+.address-block {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    background-color: #f9f9f9;
+}
+
+.address-radio {
+    margin-right: 1rem;
+    margin-top: 0.3rem;
+}
+
+.address-details {
+    flex: 1;
+}
+
+.label {
+    background-color: #28a745;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+}
+
+.phone {
+    float: right;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+#showMoreBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.address-container {
+    max-width: 6000px;
+    margin: auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+}
