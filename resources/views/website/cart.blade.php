@@ -73,7 +73,7 @@
                                             <li>Categories -:{{ $cart->product->subCategory->Category->name }}</li>
                                             <li>SubCategories -:{{ $cart->product->subCategory->name }}</li>
                                             <?php
-                                                $productsVariants = json_decode($cart->product_varinats,true);
+                                                $productsVariants = json_decode($cart->products_variants,true);
                                             ?>
                                             @foreach ($productsVariants as $varient)
                                             <li>Colour -:{{ $varient['product_size'] }}</li>

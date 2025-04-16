@@ -13,7 +13,7 @@ class Order extends Model
         return $this->belongsTo(user::class,'user_id','id');
     }
 
-    public function orderDetails(){
-        return $this->hasOne(OrderDetails::class,'id','order_id');
+    public function address(){
+        return $this->belongsTo(Address::class,'address_id','id');
     }
 }

@@ -18,7 +18,8 @@ use App\Models\OrderDetails;
 use Illuminate\Support\Facades\Route;
 
 
-// Route::view('test', 'website.user-accounts.add-address');
+Route::view('test', 'test');
+
 
 Route::middleware('AuthChack')->group(function () {
 

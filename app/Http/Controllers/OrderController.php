@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessOrderJob;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Order;
@@ -33,7 +34,7 @@ class OrderController extends Controller
 
     public function placeorder(Request $request)
     {
-        //Validate the payment method
+        // Validate the payment method
         $request->validate([
             'checkout_payment_method' => 'required'
         ], [
@@ -41,7 +42,7 @@ class OrderController extends Controller
         ]);
 
         try {
-            //Initialize address ID
+            // Initialize address ID
             $addressId = null;
 
             // Check if new address fields are provided
@@ -61,34 +62,39 @@ class OrderController extends Controller
 
                 $addressId = $address->id; // Save the address ID for linking with the order
             } else {
-                //If no address provided, check for existing address ID
+                // If no address provided, check for existing address ID
                 if (!$request->has('address_id')) {
                     return redirect()->back()->withErrors(['address_id' => 'No address information provided.']);
                 }
                 $addressId = $request->address_id; // Use existing address
             }
 
-            //  Create a new order entry
+            // Check if the cart is empty
+            $cartItems = Cart::where('user_id', Auth::id())->get();
+            if ($cartItems->isEmpty()) {
+                return redirect()->route('product.cart')->withErrors(['error' => 'Your cart is empty. Cannot place order again.']);
+            }
+
+            // Create a new order entry
             $order = new Order();
             $order->user_id = Auth::id();
             $order->address_id = $addressId;
             $order->payment_method = $request->checkout_payment_method;
             $order->save();
 
-            //  Handle order details if present
+            // Handle order details if present
             if (isset($request->orderDetails)) {
                 $total = 0; // Initialize total
 
-                //Loop through each order detail (products list)
+                // Loop through each order detail (products list)
                 foreach ($request->orderDetails as $index => $products) {
                     $productDetails = json_decode($products); // Decode JSON product data
 
                     foreach ($productDetails as $product) {
-                        //Calculate subtotal for current product
+                        // Calculate subtotal for current product
                         $subtotal = $product->qty * $product->product->price;
                         $total += $subtotal;
 
-                        //  Save order detail to DB
                         OrderDetails::create([
                             'qty' => (int) $product->qty,
                             'product_id' => $product->product_id,
@@ -96,22 +102,26 @@ class OrderController extends Controller
                             'total' => $subtotal,
                             'order_id' => $order->id,
                             'user_id' => Auth::id(),
-                            'product_varinats' => $product->products_variants,
+                            'products_variants' => $product->products_variants,
                         ]);
                     }
                 }
 
-                //Step 8: Clear user's cart after successful order
+                // Dispatch job for background processing
+                dispatch(new ProcessOrderJob($order));
+
+                // Clear user's cart after successful order
                 Cart::where('user_id', Auth::id())->delete();
 
-                //Step 9: Redirect with success message
+                // Redirect with success message
                 return redirect()->route('details.order.products', $order->id)
                     ->with('success', 'Order placed successfully!');
             } else {
-                //No order details were provided
+                // No order details were provided
                 return redirect()->back()->with('error', 'Order was not placed due to missing order details.');
             }
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
 }

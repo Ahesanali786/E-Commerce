@@ -24,7 +24,7 @@ class CartsController extends Controller
                         "product_size" => $request->selected_size[$key]
                     ];
                 }
-                $addCart->product_varinats = json_encode($productsVariants);
+                $addCart->products_variants = json_encode($productsVariants);
                 $addCart->user_id = Auth::id();
                 $addCart->save();
 
