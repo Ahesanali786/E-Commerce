@@ -121,8 +121,6 @@
                             <p>No variants available.</p>
                         </div>
                         @endif
-
-
                     </div>
                     <form action="{{ route('add.cart') }}" method="post">
                         @csrf

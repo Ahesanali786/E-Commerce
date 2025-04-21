@@ -1,71 +1,60 @@
-@extends('layout.website.app')
+@extends('layout.user-dashboard.main')
 
-@section('title','user address details')
+@section('title', 'User Address Details')
 
-@section('website')
-<main class="pt-90">
-    <div class="mb-4 pb-4"></div>
+@section('containt')
+<main class="main-content-inner">
     <section class="my-account container">
-        <h2 class="page-title">Addresses</h2>
-        <div class="row">
-            @include('layout.website.user-dashboard.user-account')
-            <div class="col-lg-9">
-                <div class="page-content my-account__address">
-                    <div class="row">
-                        <div class="col-6">
-                            <p class="notice">The following addresses will be used on the checkout page by default.</p>
-                        </div>
-                        <div class="col-6 text-right">
-                            <a href="{{ route('add.new.address') }}" class="btn btn-sm btn-info">Add New</a>
-                        </div>
+        <h2 class="page-title" style="font-size: 50px">Your Saved Addresses</h2>
+
+        <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="col-md-6">
+                <p class="notice">These addresses will be used by default at checkout.</p>
+            </div>
+            <div class="col-md-6 mb-6" style="text-align: right;">
+                <a href="{{ route('add.new.address') }}" class="btn-custom">+ Add New Address</a>
+            </div>
+        </div>
+
+        <div class="address-container mt-5">
+            <div class="address-header" style="font-size: 20px">{{ $addresses->count() }} Address{{ $addresses->count() > 1 ? 'es' : '' }}</div>
+
+            @foreach ($addresses as $index => $address)
+            <div class="address-block" style="{{ $index > 1 ? 'display:none;' : '' }}" data-index="{{ $index }}">
+                <div class="address-details">
+                    <strong>{{ $address->name }}</strong>
+                    <span class="badge-label">Work</span>
+                    <div class="text-muted">{{ $address->phone_no }}</div>
+
+                    <div>
+                        {{ $address->landmark }}, {{ $address->house_no }}, {{ $address->area }},
+                        {{ $address->city }}, {{ $address->state }} -
+                        <strong>{{ $address->pincode }}</strong>
                     </div>
-                    <div class="col-md-12">
-                        <div class="address-container">
-                            <div class="address-header">
-                                <span>{{ $addresses->count() }}</span> YOUR ADDRESS
-                            </div>
-                            <span class="text-danger">@error('addrss') <h5 style="color: red">
-                                    <strong>
-                                        {{ $message }}
-                                    </strong>
-                                </h5>
-                                @enderror
-                            </span>
-                            @foreach ($addresses as $index => $address)
 
-                            <div class="address-block" style="{{ $index > 1 ? 'display:none;' : '' }}"
-                                data-index="{{ $index }}">
-                                <div class="address-details">
-                                    <div class="my-account__address-item__title">
-                                        <a href="{{ route('edit.address',$address->id) }}"><i class="fa fa-edit"></i></a>
-                                        <a href="{{ route('delete.address',$address->id) }}"><i class="fa fa-trash"></i></a>
-                                      </div>
-                                    <div>
-                                        <strong>{{ $address->name }}</strong>
-                                        <span class="label">WORK</span>
-                                        <span class="phone">{{ $address->phone_no }}</span>
-                                    </div>
-                                    <div>
-                                        {{ $address->landmark }}, {{ $address->house_no }}, {{ $address->area }},
-                                        {{ $address->city }}, {{ $address->state }} -
-                                        <strong>{{ $address->pincode }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-
-                            @if(count($addresses) > 2)
-                            <div style="text-align:center; margin-top: 1rem;">
-                                <button id="showMoreBtn" onclick="toggleAddresses()" type="button">Show More</button>
-                            </div>
-                            @endif
-                        </div>
+                    <div class="address-actions">
+                        <a href="{{ route('edit.address', $address->id) }}" class="btn-outline">
+                            ✏️ Edit
+                        </a>
+                        <a href="{{ route('delete.address', $address->id) }}"
+                           onclick="return confirm('Are you sure you want to delete this address?')"
+                           class="btn-outline">
+                            🗑️ Delete
+                        </a>
                     </div>
                 </div>
             </div>
+            @endforeach
+
+            @if(count($addresses) > 2)
+            <div style="text-align:center;">
+                <button id="showMoreBtn" onclick="toggleAddresses()">Show More</button>
+            </div>
+            @endif
         </div>
     </section>
 </main>
+
 <script>
     function toggleAddresses() {
         const blocks = document.querySelectorAll('.address-block');
@@ -74,7 +63,7 @@
 
         blocks.forEach((block, index) => {
             if (index > 1) {
-                block.style.display = expanded ? 'none' : 'flex';
+                block.style.display = expanded ? 'none' : 'block';
             }
         });
 

@@ -1,8 +1,8 @@
-@extends('layout.website.app')
+@extends('layout.user-dashboard.main')
 
 @section('title', 'user accounts details')
 
-@section('website')
+@section('containt')
 <style>
     .error {
         color: red;
@@ -10,16 +10,15 @@
         margin-bottom: 5px;
     }
 </style>
-<main class="pt-90">
-    <div class="mb-4 pb-4"></div>
+<main class="main-content-inner">
+    <div class="main-content-wrap"></div>
     <section class="my-account container">
         <h2 class="page-title">Add New Address</h2>
         <div class="row">
-            @include('layout.website.user-dashboard.user-account')
-            <div class="col-lg-9">
+            <div class="wg-box">
                 <div class="page-content my-account__edit">
                     <div class="my-account__edit-form">
-                        <form name="account_edit_form" action="{{ route('update.address',$editAddress->id) }}" method="POST" class="needs-validation">
+                        <form name="account_edit_form" action="{{ route('update.address',$editAddress->id) }}" method="POST">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6">
@@ -29,7 +28,6 @@
                                         <label for="name">Full Name *</label>
                                         <span class="text-danger"></span>
                                     </div>
-                                    <div class="error" id="nameError"></div>
                                     <span class="text-danger">@error('name') <h5 style="color: rgb(237, 14, 14)">
                                             <strong>
                                                 {{ $message }}

@@ -10,7 +10,14 @@ class CartsController extends Controller
 {
     public function addToCart(Request $request)
     {
-        // dd($request->all());
+        // // dd($request->all());
+        // $request->validate([
+        //     'selected_colour[]' => 'required',
+        //     'selected_size[]' => 'required'
+        // ], [
+        //     'selected_colour[].required' => 'Please select a Colour.',
+        //     'selected_size[].required' => 'Please select a Size.'
+        // ]);
         try {
             if (Auth::check()) {
 

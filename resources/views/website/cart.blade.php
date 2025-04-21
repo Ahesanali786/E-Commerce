@@ -34,15 +34,14 @@
             </div>
             <div class="mt-3">
                 <input type="hidden" name="error">
-                <span class="text-danger">
-                    @error('error')
-                    <h4 style="color: red">
-                        <strong>
-                            {{ $message }}
-                        </strong>
-                    </h4>
-                    @enderror
-                </span>
+                @error('error')
+                    <div class="custom-error-box">
+                        <span class="custom-error-icon">⚠️</span>
+                        <span class="custom-error-text">{{ $message }}</span>
+                    </div>
+                @enderror
+
+
             </div>
             <div class="shopping-cart">
                 <div class="cart-table__wrapper">
@@ -77,7 +76,7 @@
                                             ?>
                                             @foreach ($productsVariants as $varient)
                                             <li>Colour -:{{ $varient['product_size'] }}</li>
-                                            <li>Size -:{{ $varient['product_colour']  }}</li>
+                                            <li>Size -:{{ $varient['product_colour'] }}</li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -133,15 +132,15 @@
                     </div> --}}
                     <div class="cart-table-footer">
                         @if ($cartDetails->count() > 0)
-                            <form action="{{ route('cart.update.qty') }}" method="POST">
-                                @csrf
-                                @foreach ($cartDetails as $cart)
-                                    <input type="hidden" name="ids[]" value="{{ $cart->id }}">
-                                @endforeach
-                                <button type="submit" class="btn btn-success">Update All Items</button>
-                            </form>
+                        <form action="{{ route('cart.update.qty') }}" method="POST">
+                            @csrf
+                            @foreach ($cartDetails as $cart)
+                            <input type="hidden" name="ids[]" value="{{ $cart->id }}">
+                            @endforeach
+                            <button type="submit" class="btn btn-success">Update All Items</button>
+                        </form>
                         @else
-                            <a href="{{ route('shop.prodcuts') }}" class="btn btn-primary">Shopping Now</a>
+                        <a href="{{ route('shop.prodcuts') }}" class="btn btn-primary">Shopping Now</a>
                         @endif
                     </div>
 
@@ -177,8 +176,8 @@
                         </div>
                         <div class="mobile_fixed-btn_wrapper">
                             <div class="button-wrapper container">
-                                    <a href="{{ route('order.products') }}" class="btn btn-primary btn-checkout">PROCEED TO
-                                        CHECKOUT</a>
+                                <a href="{{ route('order.products') }}" class="btn btn-primary btn-checkout">PROCEED TO
+                                    CHECKOUT</a>
                             </div>
                         </div>
                     </div>
@@ -187,12 +186,12 @@
         </section>
     </main>
 
-    <script src="{{ asset('website/js/plugins/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('website/js/plugins/jquery.min.js') }}"></script>
     <script src="{{ asset('website/js/plugins/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('website/js/plugins/bootstrap-slider.min.js') }}"></script>
     <script src="{{ asset('website/js/plugins/swiper.min.js') }}"></script>
     <script src="{{ asset('website/js/plugins/countdown.js') }}"></script>
-    <script src="{{ asset('website/js/theme.js') }}"></script>
+    <script src="{{ asset('website/js/theme.js') }}"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -212,7 +211,7 @@
                             type: 'POST',
                             dataType: 'json',
                             success: function(data) {
-                                toastr.success(data.success);
+                                toasstr.succes(data.success);
                                 trObj.remove();
                                 updateCartTotal();
                             }

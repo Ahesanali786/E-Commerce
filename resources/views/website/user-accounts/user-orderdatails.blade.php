@@ -1,48 +1,96 @@
-@extends('layout.website.app')
+@extends('layout.user-dashboard.main')
 
 @section('title', 'user orders')
-
-@section('website')
-<main class="pt-90">
-    <div class="mb-4 pb-4"></div>
-    <div class="mb-4 pb-4"></div>
-    <section class="my-account container">
-        <h2 class="page-title">Orders</h2>
-        <div class="row">
-            @include('layout.website.user-dashboard.user-account')
-            <div class="col-lg-9">
-                <div class="wg-table table-all-user">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered">
+@section('containt')
+<div class="main-content-inner">
+    <div class="main-content-wrap">
+        <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+            <h3>Orders</h3>
+            <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                <li>
+                    <a href="index.html">
+                        <div class="text-tiny">Dashboard</div>
+                    </a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <div class="text-tiny">Orders</div>
+                </li>
+            </ul>
+        </div>
+        <div class="wg-box">
+            <input type="hidden" name="error">
+            <span class="text-danger">
+                @error('error')
+                <h5 style="color: red">
+                    <strong>
+                        {{ $message }}
+                    </strong>
+                </h5>
+                @enderror
+            </span>
+            <div class="flex items-center justify-between gap10 flex-wrap">
+                <div class="wg-filter flex-grow">
+                </div>
+            </div>
+            <form action="{{ route('import.data') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="file" name="import_file" class="form-control">
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </div>
+            </form>
+            <div class="input-group">
+                <a href="{{ route('multi.order.download.excel') }}" class="btn btn-primary" style="font-size: 20px"><i
+                        class="fa fa-download"></i>Export All Orders</a>
+            </div>
+            <div class="wg-table table-all-user">
+                <div class="table-responsive">
+                    <form method="POST" action="{{ route('order.download.excel') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-primary mb-6" style="font-size: 20px">
+                            <i class="fa fa-download"></i> Exports Orders
+                        </button>
+                        <table class="table table-striped table-bordered" id="myTable">
                             <thead>
                                 <tr>
+                                    <th class="text-center">
+                                        <input type="checkbox" id="select-all">
+                                    </th>
                                     <th style="width: 80px">OrderNo</th>
-                                    <th>Name</th>
+                                    <th class="text-center">Name</th>
                                     <th class="text-center">Phone</th>
                                     <th class="text-center">Product Name</th>
                                     <th class="text-center">Total</th>
                                     <th class="text-center">Order Date</th>
                                     <th class="text-center">Items</th>
-                                    <th>Paymetn Method</th>
-                                    <th></th>
+                                    <th>Payment Method</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($userOrders as $userOrder)
                                 <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="order_ids[]" value="{{ $userOrder->id }}">
+                                    </td>
                                     <td class="text-center">{{ $userOrder->order->id + 1000 }}</td>
-                                    <td class="text-center">{{ $userOrder->order->name }}</td>
-                                    <td class="text-center">{{ $userOrder->order->phone_no }}</td>
+                                    <td class="text-center">{{ $userOrder->order->address->name }}</td>
+                                    <td class="text-center">{{ $userOrder->order->address->phone_no }}</td>
                                     <td class="text-center">{{ $userOrder->product->name }}</td>
                                     <td class="text-center">${{ $userOrder->total }}</td>
                                     <td class="text-center">{{ $userOrder->created_at }}</td>
                                     <td class="text-center">{{ $userOrder->qty }}</td>
-                                    <td class="text-center">{{ $userOrder->order->paymetn_method }}</td>
+                                    <td class="text-center">{{ $userOrder->order->payment_method }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('details.order.products', $userOrder->order->id) }}">
                                             <div class="list-icon-function view-icon">
                                                 <div class="item eye">
-                                                    <i class="fa fa-eye"></i>
+                                                    <i class="icon-eye"></i>
                                                 </div>
                                             </div>
                                         </a>
@@ -51,13 +99,26 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-                </div>
-                <div class="divider"></div>
-                <div class="flex items-center justify-between flex-wrap gap10 wgp-pagination">
+                    </form>
+
                 </div>
             </div>
+            <div class="divider"></div>
+            <div class="flex items-center justify-between flex-wrap gap10 wgp-pagination">
+            </div>
         </div>
-    </section>
-</main>
+    </div>
+</div>
+<x-datatablescript />
+{{-- <script type="text/javascript">
+    $(document).ready(function() {
+       $('#myTable').DataTable();
+   });
+</script> --}}
+<script>
+    document.getElementById('select-all').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('input[name="order_ids[]"]');
+        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+    });
+</script>
 @endsection

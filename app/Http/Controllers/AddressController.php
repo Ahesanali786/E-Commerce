@@ -31,7 +31,7 @@ class AddressController extends Controller
     {
         //validate user address
         $request->validate([
-            'name' => 'required|string|max:25',
+            'name' => 'required|max:25',
             'phone' => 'required|digits:10',
             'zip' => 'required|digits:6',
             'state' => 'required|string|max:100',
@@ -87,7 +87,7 @@ class AddressController extends Controller
     public function updateAddress(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:25',
+            'name' => 'required|max:25',
             'phone' => 'required|digits:10',
             'zip' => 'required|digits:6',
             'state' => 'required|string|max:100',

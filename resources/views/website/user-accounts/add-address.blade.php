@@ -1,8 +1,8 @@
-@extends('layout.website.app')
+@extends('layout.user-dashboard.main')
 
 @section('title', 'user accounts details')
 
-@section('website')
+@section('containt')
 <style>
     .error {
         color: red;
@@ -10,13 +10,12 @@
         margin-bottom: 5px;
     }
 </style>
-<main class="pt-90">
-    <div class="mb-4 pb-4"></div>
+<main class="main-content-inner">
+    <div class="main-content-wrap"></div>
     <section class="my-account container">
-        <h2 class="page-title">Add New Address</h2>
+        <h2 class="page-title mb-4">Add New Address</h2>
         <div class="row">
-            @include('layout.website.user-dashboard.user-account')
-            <div class="col-lg-9">
+            <div class="wg-box">
                 <div class="page-content my-account__edit">
                     <div class="my-account__edit-form">
                         <form name="account_edit_form" action="{{ route('store.address') }}" method="POST" class="needs-validation">

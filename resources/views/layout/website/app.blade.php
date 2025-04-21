@@ -24,8 +24,8 @@
 
 <body class="gradient-bg">
     @extends('layout.toaster')
-    @include('layout.website.header')
     <main>
+        @include('layout.website.header')
         @yield('website')
     </main>
     <hr class="mt-5 text-secondary" />
@@ -38,7 +38,6 @@
     <script src="{{ asset('website/js/plugins/countdown.js') }}"></script>
     <script src="{{ asset('website/js/theme.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    @yield('js')
 </body>
 
 </html>

@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Sub_CategoryController;
+use App\Http\Controllers\UserAdminController;
 use App\Http\Middleware\AuthChack;
 use App\Http\Middleware\UserChack;
 use App\Models\OrderDetails;
@@ -94,7 +95,7 @@ Route::middleware('AuthChack')->group(function () {
     });
 
     Route::prefix('user/account')->group(function () {
-        Route::get('dashboard', [OrderDetailsController::class, 'shwouserDashboard'])->name('user.dashboard');
+
         Route::get('orders', [OrderDetailsController::class, 'shwouserOrders'])->name('user.dashboard.orders.list');
         Route::get('/', [OrderDetailsController::class, 'showUserAccounts'])->name('user.accounts');
         Route::get('/address', [AddressController::class, 'showAddress'])->name('user.accounts.address');
@@ -103,6 +104,26 @@ Route::middleware('AuthChack')->group(function () {
         Route::get('/edit-newaddress/{id}', [AddressController::class, 'editAddress'])->name('edit.address');
         Route::post('/update/address/{id}', [AddressController::class, 'updateAddress'])->name('update.address');
         Route::get('delete/address/{id}',[AddressController::class,'deleteAddress'])->name('delete.address');
+
+        //chart analytics Routes
+        //default route
+        Route::get('dashboard', [UserAdminController::class, 'showData'])->name('user.dashboard');
+        Route::get('last-month/data',[UserAdminController::class,'getLastMonthOrder'])->name('last.month.data');
+        Route::get('last-week/data',[UserAdminController::class,'getLastWeekOrders'])->name('last.week.data');
+        Route::get('last-year/data',[UserAdminController::class,'getLastYearOrder'])->name('last.year.data');
+
+        /**
+         * download data with exel formate
+         */
+
+         Route::post('orders/list/download',[UserAdminController::class,'dawloadDataExalFormate'])->name('order.download.excel');
+         Route::get('orders/list/download',[UserAdminController::class,'multipleData'])->name('multi.order.download.excel');
+
+         /**
+          * Import Data With Excel Sheet
+          */
+
+        Route::post('import/orders',[UserAdminController::class,'importDataWithExcel'])->name('import.data');
     });
 });
 
@@ -142,3 +163,13 @@ Route::middleware(UserChack::class)->group(function () {
 });
 
 Route::get('user/logout', [AuthController::class, 'logout'])->name('user.logout');
+
+
+
+// Route::get('order', function () {
+//     $users = OrderDetails::query()->paginate(5);
+
+//     return view('test', [
+//         'users' => $users,
+//     ]);
+// });
