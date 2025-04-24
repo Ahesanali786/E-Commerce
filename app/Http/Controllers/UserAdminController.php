@@ -277,4 +277,8 @@ class UserAdminController extends Controller
 
         return redirect()->back()->with('success','Data Is Imported Successfully!');
      }
+
+     public function ContectUs(){
+        return view('website.contect');
+     }
 }

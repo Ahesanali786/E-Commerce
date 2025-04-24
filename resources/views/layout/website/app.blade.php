@@ -37,7 +37,6 @@
     <script src="{{ asset('website/js/plugins/swiper.min.js') }}"></script>
     <script src="{{ asset('website/js/plugins/countdown.js') }}"></script>
     <script src="{{ asset('website/js/theme.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </body>
 
 </html>

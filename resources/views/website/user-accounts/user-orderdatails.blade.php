@@ -2,6 +2,45 @@
 
 @section('title', 'user orders')
 @section('containt')
+<style>
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        /* Full screen height */
+    }
+
+    .input-group {
+        display: flex;
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group input[type="file"] {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        outline: none;
+    }
+
+    .input-group .btn {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .input-group .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
 <div class="main-content-inner">
     <div class="main-content-wrap">
         <div class="flex items-center flex-wrap justify-between gap20 mb-27">
@@ -38,13 +77,13 @@
             <form action="{{ route('import.data') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="col-md-6">
-                    <div class="input-group">
+                    <div class="input-group" style="width: 500px,height: 500px">
                         <input type="file" name="import_file" class="form-control">
                         <button type="submit" class="btn btn-primary">Import</button>
                     </div>
                 </div>
             </form>
-            <div class="input-group">
+            <div class="input">
                 <a href="{{ route('multi.order.download.excel') }}" class="btn btn-primary" style="font-size: 20px"><i
                         class="fa fa-download"></i>Export All Orders</a>
             </div>
@@ -55,7 +94,7 @@
                         <button type="submit" class="btn btn-primary mb-6" style="font-size: 20px">
                             <i class="fa fa-download"></i> Exports Orders
                         </button>
-                        <table class="table table-striped table-bordered" id="myTable">
+                        <table class="table table-striped table-bordered data-table">
                             <thead>
                                 <tr>
                                     <th class="text-center">
@@ -72,7 +111,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            {{-- <tbody>
                                 @foreach ($userOrders as $userOrder)
                                 <tr>
                                     <td class="text-center">
@@ -97,7 +136,7 @@
                                     </td>
                                 </tr>
                                 @endforeach
-                            </tbody>
+                            </tbody> --}}
                         </table>
                     </form>
 
@@ -121,4 +160,27 @@
         checkboxes.forEach(checkbox => checkbox.checked = this.checked);
     });
 </script>
+
+<script type="text/javascript">
+    $(function () {
+        var table = $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('user.dashboard.orders.list') }}",
+            columns: [
+                { data: 'select', name: 'select', orderable: false, searchable: false },
+                { data: 'Order_id', name: 'Order_id' },
+                { data: 'name', name: 'name' },
+                { data: 'phone', name: 'phone' },
+                { data: 'product_name', name: 'product_name' },
+                { data: 'total', name: 'total' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'qty', name: 'qty' },
+                { data: 'payment_method', name: 'payment_method' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ]
+        });
+    });
+</script>
+
 @endsection

@@ -28,7 +28,7 @@
                                         <label for="name">Full Name *</label>
                                         <span class="text-danger"></span>
                                     </div>
-                                    <div class="error" id="nameError"></div>
+                                    {{-- <div class="error" id="nameError"></div> --}}
                                     <span class="text-danger">@error('name') <h5 style="color: rgb(237, 14, 14)">
                                             <strong>
                                                 {{ $message }}

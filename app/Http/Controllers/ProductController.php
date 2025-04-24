@@ -105,14 +105,29 @@ class ProductController extends Controller
         $deleteProduct->delete();
         return redirect()->route('all.products')->with('success', 'Product deleted Successfully');
     }
+    /**
+     * show product category wise
+     */
     public function CategoryReletedProducts($category_id)
     {
+        // get categoryId
         $subctrg = Sub_Category::where('category_id', $category_id)->pluck('id');
-        $products = Products::whereIn('sub_category_id', $subctrg)->get();
+        $products = Products::whereIn('sub_category_id', $subctrg)->paginate(6);
         $showCategories = Category::get();
         $subCategorys = Sub_Category::where('category_id', $category_id)->get();
         // dd($subCategorys);
 
-        return view('website.show_product', compact('products','subctrg', 'showCategories', 'subCategorys'));
+        return view('website.show_product', compact('products', 'subctrg', 'showCategories', 'subCategorys'));
+    }
+    /**
+     * getting product on subCategories based
+     */
+    public function subCategoryReletedProducts($subCategoryId)
+    {
+        $products = Products::where('sub_category_id', $subCategoryId)->paginate(6);
+        $showCategories = Category::get();
+        $subCategorys = Sub_Category::where('id', $subCategoryId)->get();
+
+        return view('website.sub-category_products', compact('products', 'showCategories', 'subCategorys'));
     }
 }

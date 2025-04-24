@@ -1,7 +1,8 @@
 @extends('layout.website.app')
 
 @section('title', 'products-details')
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('website/css/myorder.css') }}">
 @section('website')
 
 <body class="gradient-bg">
@@ -16,8 +17,8 @@
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide product-single__image-item">
                                         <img loading="lazy" class="h-auto"
-                                            src="{{ asset('Product_image/' . $productDtails->image) }}" width="674"
-                                            height="674" alt="{{ $productDtails->name }}" />
+                                            src="{{ asset('Product_image/' . $productDetails->image) }}" width="674"
+                                            height="674" alt="{{ $productDetails->name }}" />
                                         </a>
                                     </div>
                                 </div>
@@ -27,8 +28,8 @@
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide product-single__image-item"><img loading="lazy"
-                                            class="h-auto" src="{{ asset('Product_image/' . $productDtails->image) }}"
-                                            width="104" height="104" alt="{{ $productDtails->name }}" /></div>
+                                            class="h-auto" src="{{ asset('Product_image/' . $productDetails->image) }}"
+                                            width="104" height="104" alt="{{ $productDetails->name }}" /></div>
                                 </div>
                             </div>
                         </div>
@@ -44,45 +45,62 @@
 
                         <div
                             class="product-single__prev-next d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
-                            <a href="{{ URL::to('products/details/' . $previous) }}"
+                            @if ($previous)
+                            <a href="{{  route('prodcuts.details', ['product_id' => Crypt::encrypt($previous->id)]) }}"
                                 class="text-uppercase fw-medium"><svg width="10" height="10" viewBox="0 0 25 25"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <use href="#icon_prev_md" />
                                 </svg><span class="menu-link menu-link_us-s">Prev</span></a>
-                            <a href="{{ URL::to('products/details/' . $next) }}" class="text-uppercase fw-medium"><span
-                                    class="menu-link menu-link_us-s">Next</span><svg width="10" height="10"
-                                    viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+                            @endif
+                            @if ($next)
+                            <a href="{{ route('prodcuts.details', ['product_id' => Crypt::encrypt($next->id)])}}"
+                                class="text-uppercase fw-medium"><span class="menu-link menu-link_us-s">Next</span><svg
+                                    width="10" height="10" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
                                     <use href="#icon_next_md" />
                                 </svg></a>
+                            @endif
                         </div><!-- /.shop-acs -->
                     </div>
-                    <h1 class="product-single__name">{{ $productDtails->name }}</h1>
+                    <h1 class="product-single__name">{{ $productDetails->name }}</h1>
                     <div class="product-single__rating">
                         <div class="reviews-group d-flex">
-                            <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                                <use href="#icon_star" />
-                            </svg>
-                            <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                                <use href="#icon_star" />
-                            </svg>
-                            <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                                <use href="#icon_star" />
-                            </svg>
-                            <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                                <use href="#icon_star" />
-                            </svg>
-                            <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                                <use href="#icon_star" />
-                            </svg>
+                            @foreach($reviewProducts as $product)
+                            <div>
+                                {{-- Counting the avrage rating on this products --}}
+                                @php
+                                $averageRating = $product->review->avg('rating');
+                                $filledStars = floor($averageRating);
+                                $halfStar = $averageRating - $filledStars >= 0.5 ? 1 : 0;
+                                $emptyStar = 5 - $filledStars - $halfStar;
+                                @endphp
+                                <div class="rating-stars">
+                                    @for ($i = 1; $i <= $filledStars; $i++) <i class="fa fa-star filled"
+                                        aria-hidden="true"></i>
+                                        @endfor
+
+                                        @if ($halfStar)
+                                        <i class="fa fa-star-half-o half" aria-hidden="true"></i>
+                                        @endif
+
+                                        @for ($i = 1; $i <= $emptyStar; $i++) <i class="fa fa-star-o empty"
+                                            aria-hidden="true"></i>
+                                            @endfor
+                                </div>
+
+                                <p>Average Rating: {{ number_format($averageRating, 1) ?? 'No ratings yet' }}
+                                </p>
+                            </div>
+                            @endforeach
+                            <span class="reviews-note text-lowercase text-secondary ms-1">{{ count($productReviews) }}k+
+                                reviews</span>
                         </div>
-                        <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                     </div>
                     <div class="product-single__price">
                         <span class="current-price">$</span>
-                        <span class="current-price">{{ $productDtails->price }}</span>
+                        <span class="current-price">{{ $productDetails->price }}</span>
                     </div>
                     <div class="product-single__short-desc">
-                        <p>{{ $productDtails->description }}</p>
+                        <p>{{ $productDetails->description }}</p>
                         {{-- <p>{{ $variants->attribute()->variant_name }} -- {{ $variants->variant_value }}</p> --}}
 
 
@@ -133,7 +151,7 @@
                                 <div class="qty-control__reduce">-</div>
                                 <div class="qty-control__increase">+</div>
                             </div>
-                            <input type="hidden" name="product_id" value="{{ $productDtails->id }}">
+                            <input type="hidden" name="product_id" value="{{ $productDetails->id }}">
                             <button type="submit" class="btn btn-primary btn-addtocart">Add to
                                 Cart</button>
                         </div>
@@ -181,11 +199,11 @@
                     <div class="product-single__meta-info">
                         <div class="meta-item">
                             <label>SUB-CATEGORIES:</label>
-                            <span>{{ $productDtails->subCategory->name }}</span>
+                            <span>{{ $productDetails->subCategory->name }}</span>
                         </div>
                         <div class="meta-item">
                             <label>Categories:</label>
-                            <span>{{ $productDtails->subCategory->Category->name }}</span>
+                            <span>{{ $productDetails->subCategory->Category->name }}</span>
                         </div>
                         <div class="meta-item">
                             <label>Tags:</label>
@@ -209,14 +227,14 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link nav-link_underscore" id="tab-reviews-tab" data-bs-toggle="tab"
                             href="#tab-reviews" role="tab" aria-controls="tab-reviews" aria-selected="false">Reviews
-                            (2)</a>
+                            ({{ count($productReviews) }})</a>
                     </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-description" role="tabpanel"
                         aria-labelledby="tab-description-tab">
                         <div class="product-single__description">
-                            <h3 class="block-title mb-4">{{ $productDtails->description }}</p>
+                            <h3 class="block-title mb-4">{{ $productDetails->description }}</p>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <h3 class="block-title">Why choose product?</h3>
@@ -271,86 +289,47 @@
                     <div class="tab-pane fade" id="tab-reviews" role="tabpanel" aria-labelledby="tab-reviews-tab">
                         <h2 class="product-single__reviews-title">Reviews</h2>
                         <div class="product-single__reviews-list">
+                            @if (count($productReviews) > 0)
+                            @foreach ($productReviews as $productReview)
                             <div class="product-single__reviews-item">
                                 <div class="customer-avatar">
-                                    <img loading="lazy" src="assets/images/avatar.jpg" alt="" />
+                                    <img loading="lazy" src="{{ asset('website-admin/images/avatar/user-1.png') }}"
+                                        alt="" />
                                 </div>
                                 <div class="customer-review">
-                                    <div class="customer-name">
-                                        <h6>Janice Miller</h6>
+                                    <div class="customer-name d-flex">
+                                        <h6>{{ $productReview->name }}</h6>
                                         <div class="reviews-group d-flex">
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
+                                            @for ($i = 0; $i < $productReview->rating ; $i++)
+                                                <svg class="review-star" viewBox="0 0 9 9"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <use href="#icon_star" />
+                                                </svg>
+                                                @endfor
                                         </div>
                                     </div>
-                                    <div class="review-date">April 06, 2023</div>
+                                    <div class="review-date">{{ date('M-d-Y',strtotime($productReview->created_at)) }}
+                                    </div>
                                     <div class="review-text">
-                                        <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit
-                                            quo minus id quod
-                                            maxime placeat facere possimus, omnis voluptas assumenda est…</p>
+                                        <p>{{ $productReview->product_review }}</p>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
+                            @else
                             <div class="product-single__reviews-item">
-                                <div class="customer-avatar">
-                                    <img loading="lazy" src="assets/images/avatar.jpg" alt="" />
-                                </div>
                                 <div class="customer-review">
-                                    <div class="customer-name">
-                                        <h6>Benjam Porter</h6>
-                                        <div class="reviews-group d-flex">
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                            <svg class="review-star" viewBox="0 0 9 9"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <use href="#icon_star" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="review-date">April 06, 2023</div>
-                                    <div class="review-text">
-                                        <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit
-                                            quo minus id quod
-                                            maxime placeat facere possimus, omnis voluptas assumenda est…</p>
+                                    <div class="reviews-group d-flex">
+                                        <h3>This Product No Review</h3>
                                     </div>
                                 </div>
                             </div>
+                            @endif
+
                         </div>
-                        <div class="product-single__review-form">
+                        {{-- <div class="product-single__review-form">
                             <form name="customer-review-form">
-                                <h5>Be the first to review “Message Cotton T-Shirt”</h5>
+                                <h5>Be the first to review “Message {{ $productDetails->name }}”</h5>
                                 <p>Your email address will not be published. Required fields are marked *</p>
                                 <div class="select-star-rating">
                                     <label>Your rating *</label>
@@ -406,7 +385,7 @@
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -448,12 +427,13 @@
               }
             }
           }'>
+                    @if (count($products) > 0)
+                    @foreach ($products as $product)
                     <div class="swiper-wrapper">
-                        @foreach ($products as $product)
                         {{-- {{ dd($product) }} --}}
                         <div class="swiper-slide product-card">
                             <div class="pc__img-wrapper">
-                                <a href="{{ url('products/details/' . $product->id) }}">
+                                <a href="{{  route('prodcuts.details', ['product_id' => Crypt::encrypt($product->id)]) }}">
                                     <img loading="lazy" src="{{ asset('Product_image/' . $product->image) }}"
                                         width="330" height="400" alt="{{ $product->name }}" class="pc__img">
                                 </a>
@@ -475,9 +455,38 @@
                                     </svg>
                                 </button>
                             </div>
+                            <div class="reviews-group d-flex">
+                                <div>
+                                    @php
+                                    $averageRating = $product->review->avg('rating');
+                                    $filledStars = floor($averageRating);
+                                    $halfStar = $averageRating - $filledStars >= 0.5 ? 1 : 0;
+                                    $emptyStar = 5 - $filledStars - $halfStar;
+                                    @endphp
+                                    <div class="rating-stars">
+                                        @for ($i = 1; $i <= $filledStars; $i++) <i class="fa fa-star filled"
+                                            aria-hidden="true"></i>
+                                            @endfor
+
+                                            @if ($halfStar)
+                                            <i class="fa fa-star-half-o half" aria-hidden="true"></i>
+                                            @endif
+
+                                            @for ($i = 1; $i <= $emptyStar; $i++) <i class="fa fa-star-o empty"
+                                                aria-hidden="true"></i>
+                                                @endfor
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="reviews-note text-lowercase text-secondary ms-1">{{ count($product->review)
+                                }}k+
+                                reviews</span>
                         </div>
-                        @endforeach
                     </div><!-- /.swiper-wrapper -->
+                    @endforeach
+                    @else
+                    <h4><strong>Comming Soon For thi Category Product</strong></h4>
+                    @endif
                 </div><!-- /.swiper-container js-swiper-slider -->
                 <div class="products-pagination mt-4 mb-5 d-flex align-items-center justify-content-center"></div>
                 <!-- /.products-pagination -->

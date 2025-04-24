@@ -4,9 +4,10 @@
             {{-- <img class="" id="logo_header" alt="" src="{{ asset('website-admin/images/logo/logo.png') }}"
                 data-light="{{ asset('website-admin/images/logo/logo.png') }}"
                 data-dark="{{ asset('website-admin/images/logo/logo.png') }}"> --}}
-                <img class="" alt="" src="{{ asset('website-admin/images/logo/logo.png') }}"
-                    data-light="{{ asset('website-admin/images/logo/logo.png') }}" data-dark="{{ asset('website-admin/images/logo/logo.png') }}"
-                     data-retina="{{ asset('website-admin/images/logo/logo.png') }}">
+            <img class="" alt="" src="{{ asset('website-admin/images/logo/logo.png') }}"
+                data-light="{{ asset('website-admin/images/logo/logo.png') }}"
+                data-dark="{{ asset('website-admin/images/logo/logo.png') }}"
+                data-retina="{{ asset('website-admin/images/logo/logo.png') }}">
         </a>
         <div class="button-show-hide">
             <i class="icon-menu-left"></i>
@@ -14,7 +15,9 @@
     </div>
     <div class="center">
         <div class="center-item">
-            <div class="center-heading">Main Home</div>
+            <a href="{{ route('home.page') }}">
+                <div class="center-heading">Main Home</div>
+            </a>
             <ul class="menu-list">
                 <li class="menu-item">
                     <a href="{{ route('user.dashboard') }}" class="">

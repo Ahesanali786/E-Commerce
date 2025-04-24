@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\OrderDetails;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromView;
 // use Maatwebsite\Excel\Concerns\FromCollection;
 
@@ -24,7 +25,7 @@ class OrderDetailsExport implements FromView
 
     public function view(): View
     {
-        $allOrder = $this->id ? OrderDetails::whereIn('id', $this->id)->get() : OrderDetails::get();
+        $allOrder = $this->id ? OrderDetails::whereIn('id', $this->id)->get() : OrderDetails::where('user_id',Auth::id())->get();
         return view('expotedData.orderData', [
             'userOrders' => $allOrder
         ]);

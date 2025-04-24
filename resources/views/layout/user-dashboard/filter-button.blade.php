@@ -1,4 +1,3 @@
-
 <div class="flex items-center justify-between">
     <h5>Earnings revenue</h5>
     <div class="dropdown default">

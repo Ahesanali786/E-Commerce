@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailsController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Sub_CategoryController;
@@ -104,6 +105,9 @@ Route::middleware('AuthChack')->group(function () {
         Route::get('/edit-newaddress/{id}', [AddressController::class, 'editAddress'])->name('edit.address');
         Route::post('/update/address/{id}', [AddressController::class, 'updateAddress'])->name('update.address');
         Route::get('delete/address/{id}',[AddressController::class,'deleteAddress'])->name('delete.address');
+        Route::get('my-orders',[OrderDetailsController::class,'ShowUserOrders'])->name('my.orders');
+        Route::get('product/review',[OrderDetailsController::class,'sendProductReview'])->name('product.review');
+        Route::post('product/review/successfull',[ReviewController::class,'storeProductReview'])->name('store.product.review');
 
         //chart analytics Routes
         //default route
@@ -131,10 +135,12 @@ Route::middleware('AuthChack')->group(function () {
 
 Route::get('/', [ShopController::class, 'index'])->name('home.page');
 Route::get('shop/products', [ShopController::class, 'showCategories'])->name('shop.prodcuts');
-Route::get('products/details/{id}', [ShopController::class, 'productDetails'])->name('prodcuts.details');
+Route::get('products/details', [ShopController::class, 'productDetails'])->name('prodcuts.details');
 Route::get('product/variants/details/{id}', [ShopController::class, 'getvariantsproducts'])->name('prodcuts.variants.details');
 Route::get('about', [ShopController::class, 'about'])->name('about.page');
+Route::get('contect-us', [UserAdminController::class, 'ContectUs'])->name('contect.page');
 Route::get('selected/products/{id}', [ProductController::class, 'CategoryReletedProducts'])->name('selected.products');
+Route::get('sub-categories/product/{subCategoryId}',[ProductController::class,'subCategoryReletedProducts'])->name('subCategories.product');
 
 
 
@@ -152,6 +158,7 @@ Route::post('/cart/update-all', [CartsController::class, 'updateAll'])->name('ca
 
 
 
+
 // Authentication Routes
 Route::middleware(UserChack::class)->group(function () {
     Route::get('register/user', [AuthController::class, 'register'])->name('register');
@@ -164,12 +171,3 @@ Route::middleware(UserChack::class)->group(function () {
 
 Route::get('user/logout', [AuthController::class, 'logout'])->name('user.logout');
 
-
-
-// Route::get('order', function () {
-//     $users = OrderDetails::query()->paginate(5);
-
-//     return view('test', [
-//         'users' => $users,
-//     ]);
-// });
